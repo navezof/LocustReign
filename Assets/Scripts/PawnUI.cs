@@ -26,18 +26,18 @@ public class PawnUI : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+    {
+        text_mana.text = "Mana : " + owner.GetPersona().mana.ToString() + "(" + owner.GetPersona().previsionMana.ToString() + ")";
+
+        text_AGI.text = "AGI : " + owner.AGI.ToString();
+        text_STR.text = "STR : " + owner.STR.ToString();
+        text_WIT.text = "WIT : " + owner.WIT.ToString();
 	}
 
     void SetText()
     {
         text_name.text = name;
         text_persona.text = owner.GetPersona().name;
-        text_mana.text = "Mana : " + owner.GetPersona().mana.ToString();
-
-        text_AGI.text = "AGI : " + owner.AGI.ToString();
-        text_STR.text = "STR : " + owner.STR.ToString();
-        text_WIT.text = "WIT : " + owner.WIT.ToString();
     }
 }

@@ -93,6 +93,7 @@ public class CombatManager : MonoBehaviour {
 
     public void EndRound()
     {
+        attacker.ManaConsumption();
         if (IsGameOver())
         {
             Debug.Log("GameOver");
@@ -116,7 +117,9 @@ public class CombatManager : MonoBehaviour {
 
     public bool IsGameOver()
     {
-        return (false);
+        if (attacker.HasMana())
+            return (false);
+        return (true);
     }
 
     public bool IsTurnOver()

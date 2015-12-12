@@ -50,14 +50,39 @@ public class CardUI : MonoBehaviour
         button_BRoundSTR.onClick.AddListener(() => { ClickRound(1, Card.EAttribute.STR); });
         button_BRoundWIT.onClick.AddListener(() => { ClickRound(1, Card.EAttribute.WIT); });
 
+        button_CRoundAGI.onClick.AddListener(() => { ClickRound(2, Card.EAttribute.AGI); });
+        button_CRoundSTR.onClick.AddListener(() => { ClickRound(2, Card.EAttribute.STR); });
+        button_CRoundWIT.onClick.AddListener(() => { ClickRound(2, Card.EAttribute.WIT); });
+
+        button_DRoundAGI.onClick.AddListener(() => { ClickRound(3, Card.EAttribute.AGI); });
+        button_DRoundSTR.onClick.AddListener(() => { ClickRound(3, Card.EAttribute.STR); });
+        button_DRoundWIT.onClick.AddListener(() => { ClickRound(3, Card.EAttribute.WIT); });
+
         button_done.onClick.AddListener(() => { ClickDone(); });
+    }
+
+    void SetCardsName()
+    {
+        button_ARoundAGI.GetComponentInChildren<Text>().text = owner.GetPersona().AGICards[0].GetText();
+        button_BRoundAGI.GetComponentInChildren<Text>().text = owner.GetPersona().AGICards[1].GetText();
+        button_CRoundAGI.GetComponentInChildren<Text>().text = owner.GetPersona().AGICards[2].GetText();
+        button_DRoundAGI.GetComponentInChildren<Text>().text = owner.GetPersona().AGICards[3].GetText();
+
+        button_ARoundSTR.GetComponentInChildren<Text>().text = owner.GetPersona().STRCards[0].GetText();
+        button_BRoundSTR.GetComponentInChildren<Text>().text = owner.GetPersona().STRCards[1].GetText();
+        button_CRoundSTR.GetComponentInChildren<Text>().text = owner.GetPersona().STRCards[2].GetText();
+        button_DRoundSTR.GetComponentInChildren<Text>().text = owner.GetPersona().STRCards[3].GetText();
+
+        button_ARoundWIT.GetComponentInChildren<Text>().text = owner.GetPersona().WITCards[0].GetText();
+        button_BRoundWIT.GetComponentInChildren<Text>().text = owner.GetPersona().WITCards[1].GetText();
+        button_CRoundWIT.GetComponentInChildren<Text>().text = owner.GetPersona().WITCards[2].GetText();
+        button_DRoundWIT.GetComponentInChildren<Text>().text = owner.GetPersona().WITCards[3].GetText();
     }
 
     public void SetAttackerMode(bool value)
     {
-        
-        showRoundA(value);
-        showRoundB(value);
+        ShowAllRound(value);
+        //SetCardsName();
 
         button_done.gameObject.SetActive(value);
 
@@ -88,6 +113,8 @@ public class CardUI : MonoBehaviour
     {
         showRoundA(value);
         showRoundB(value);
+        showRoundC(value);
+        showRoundD(value);
     }
 
     void showRoundA(bool value)
@@ -104,6 +131,20 @@ public class CardUI : MonoBehaviour
         button_BRoundWIT.gameObject.SetActive(value);
     }
 
+    void showRoundC(bool value)
+    {
+        button_CRoundAGI.gameObject.SetActive(value);
+        button_CRoundSTR.gameObject.SetActive(value);
+        button_CRoundWIT.gameObject.SetActive(value);
+    }
+
+    void showRoundD(bool value)
+    {
+        button_DRoundAGI.gameObject.SetActive(value);
+        button_DRoundSTR.gameObject.SetActive(value);
+        button_DRoundWIT.gameObject.SetActive(value);
+    }
+
     public void Reset()
     {
         foreach (Text text in text_round)
@@ -115,10 +156,18 @@ public class CardUI : MonoBehaviour
 
     public void ClickRound(int round, Card.EAttribute attribute)
     {
-        owner.selectedCards[round] = owner.GetPersona().GetCard(round, attribute);
-        owner.selectedAttribute[round] = attribute;
-
-        text_round[round].text = owner.selectedCards[round].name;
+        Card card = owner.GetPersona().GetCard(round, attribute);
+        if (owner.CanUseCard(card))
+        {
+            owner.selectedCards[round] = owner.GetPersona().GetCard(round, attribute);
+            owner.GetPersona().previsionMana += owner.selectedCards[round].cost;
+            owner.selectedAttribute[round] = attribute;
+            text_round[round].text = owner.selectedCards[round].name;
+        }
+        else
+        {
+            Debug.Log("Not enough mana");
+        }
     }
 
     public void ClickDone()

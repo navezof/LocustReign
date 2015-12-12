@@ -33,11 +33,6 @@ public class Pawn : MonoBehaviour {
     {
 	}
 
-    public void SetDone(bool value)
-    {
-        combat.Done();
-    }
-
     public void SetAttacker(bool value)
     {
         ui.SetAttackerMode(value);
@@ -48,12 +43,63 @@ public class Pawn : MonoBehaviour {
         ui.SetDefenderMode(value, combat.round);
     }
 
+    public void SetDone(bool value)
+    {
+        combat.Done();
+    }
+
     public void Reset()
     {
+        GetPersona().previsionMana = 0;
         selectedCards = new Card[3];
         selectedAttribute = new Card.EAttribute[2];
         ui.Reset();
     }
+
+    public bool CanUseCard(Card card)
+    {
+        if (card.cost > GetPersona().mana - GetPersona().previsionMana)
+            return (false);
+        return (true);
+    }
+
+    public void ManaConsumption()
+    {
+        GetPersona().mana -= GetPersona().previsionMana;
+    }
+
+    public bool HasMana()
+    {
+        if (GetPersona().mana <= 0)
+        {
+            Debug.Log(GetPersona().name + " don't have mana anymore!");
+            return (SwitchToHealthyPersona());
+        }
+        return (true);
+    }
+
+    public bool SwitchToHealthyPersona()
+    {
+        for (int i = 0; i < personas.Length; i++)
+        {
+            if (personas[i].mana > 0)
+            {
+                SwitchPersona(i);
+                return (true);
+            }
+        }
+        return (false);
+    }
+
+    public void SwitchPersona(int iPersona)
+    {
+        cPersona = iPersona;
+        personas[cPersona].Invoke();
+    }
+
+    /**
+     * GETTER AND SETTER
+     */
 
     public Persona GetPersona()
     {
@@ -62,7 +108,7 @@ public class Pawn : MonoBehaviour {
 
     public int GetCardValue(int round)
     {
-        return (GetPersona().mana + GetAttribute(selectedAttribute[round]) + selectedCards[round].sync);
+        return (GetPersona().mana + GetAttribute(selectedAttribute[round]) + selectedCards[round].power);
     }
 
     public int GetAttribute(Card.EAttribute attribute)

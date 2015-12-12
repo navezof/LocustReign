@@ -11,7 +11,7 @@ public class Card : MonoBehaviour {
     };
 
     public EAttribute attribute;
-    public int sync;
+    public int power;
     public int cost;
 
 	// Use this for initialization
@@ -23,4 +23,9 @@ public class Card : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public string GetText()
+    {
+        return (name + " /p " + power + " /c " + cost);
+    }
 }

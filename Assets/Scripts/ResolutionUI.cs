@@ -43,8 +43,14 @@ public class ResolutionUI : MonoBehaviour {
 
         if (value)
         {
-            text_redCard.text = combat.red.selectedCards[combat.round].name;
-            text_blueCard.text = combat.blue.selectedCards[combat.round].name;
+            if (combat.red.selectedCards[combat.round] != null)
+                text_redCard.text = combat.red.selectedCards[combat.round].name;
+            else
+                text_redCard.text = combat.red.name + " do nothing this round.";
+            if (combat.blue.selectedCards[combat.round] != null)
+                text_blueCard.text = combat.blue.selectedCards[combat.round].name;
+            else
+                text_blueCard.text = combat.blue.name + " do nothing this round.";
         }
 
         button_done.gameObject.SetActive(value);
@@ -58,8 +64,17 @@ public class ResolutionUI : MonoBehaviour {
 
         if (value)
         {
-            text_redValue.text = "Card power : " + combat.red.GetCardValue(combat.round).ToString();
-            text_blueValue.text = "Card power : " + combat.blue.GetCardValue(combat.round).ToString();
+            if (combat.red.selectedCards[combat.round] != null)
+                redPower = combat.red.GetCardValue(combat.round);
+            else
+                redPower = 0;
+            if (combat.blue.selectedCards[combat.round] != null)
+                bluePower = combat.blue.GetCardValue(combat.round);
+            else
+                bluePower = 0;
+
+            text_redValue.text = "Card Power : " + redPower;
+            text_blueValue.text = "Card Power : " + bluePower;
         }
     }
 

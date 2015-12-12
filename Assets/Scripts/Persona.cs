@@ -8,16 +8,28 @@ public class Persona : MonoBehaviour {
     public Card[] WITCards;
 
     public int mana;
+    public int previsionMana;
+
+    public IShard[] invokationShards;
 
 	// Use this for initialization
 	void Start () {
-	
+        invokationShards = GetComponents<IShard>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+    public void Invoke()
+    {
+        Debug.Log("Invokation : " + name);
+        foreach (IShard invokationShard in invokationShards)
+        {
+            invokationShard.Execute();
+        }
+    }
 
     public Card GetCard(int round, Card.EAttribute attribute)
     {
