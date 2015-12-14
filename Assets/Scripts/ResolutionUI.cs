@@ -6,109 +6,55 @@ public class ResolutionUI : MonoBehaviour {
 
     CombatManager combat;
 
-    public Text text_redCard;
-    public Text text_redValue;
+    public Text text_redName;
+    public Text text_redArcane;
+    public Text text_redAttribute;
+    public Text text_redDice;
+    public Text text_redPower;
 
-    public Text text_blueCard;
-    public Text text_blueValue;
+    public Text text_blueName;
+    public Text text_blueArcane;
+    public Text text_blueAttribute;
+    public Text text_blueDice;
+    public Text text_bluePower;
 
-    public Text text_resolution;
+    public Text text_result;
 
-    public Button button_done;
-
-    public int redPower;
-    public int bluePower;
-
-    void Awake()
-    {
-        combat = GetComponent<CombatManager>();
-        SetResolution(false);
-        SetValues(false);
-    }
+    public Button button_resolutionDone;
 
     void Start()
     {
-        SetListeners();
+        combat = GameObject.Find("Combat").GetComponent<CombatManager>();
     }
 
-    void SetListeners()
+    public void drawResolution(Pawn red, Card redCard, Pawn blue, Card blueCard)
     {
-        button_done.onClick.AddListener(() => { ClickDone(); });
+        text_redName.text = redCard.name;
+        text_redArcane.text = "Arc : " + redCard.arcane.ToString();
+        if (red.isAttacker)
+            text_redAttribute.text = "ATK : " + red.attribute.ATK.ToString();
+        else
+            text_redAttribute.text = "DEF : " + red.attribute.DEF.ToString();
+        text_redDice.text = "Dice : " + red.dice.ToString();
+        text_redPower.text = "Power : " + red.power.ToString();
+
+        text_blueName.text = blueCard.name;
+        text_blueArcane.text = "Arc : " + blueCard.arcane.ToString();
+        if (blue.isAttacker)
+            text_blueAttribute.text = "ATK : " + blue.attribute.ATK.ToString();
+        else
+            text_blueAttribute.text = "DEF : " + blue.attribute.DEF.ToString();
+        text_blueDice.text = "Dice : " + blue.dice.ToString();
+        text_bluePower.text = "Power : " + blue.power.ToString();
+
+        if (red.isWinner)
+            text_result.text = red.name + " won!";
+        else
+            text_result.text = blue.name + " won!";
     }
 
-    public void SetResolution(bool value)
+    public void OnResolutionDoneClick()
     {
-        text_redCard.gameObject.SetActive(value);
-        text_blueCard.gameObject.SetActive(value);
-
-        if (value)
-        {
-            if (combat.red.selectedCards[combat.round] != null)
-                text_redCard.text = combat.red.selectedCards[combat.round].name;
-            else
-                text_redCard.text = combat.red.name + " do nothing this round.";
-            if (combat.blue.selectedCards[combat.round] != null)
-                text_blueCard.text = combat.blue.selectedCards[combat.round].name;
-            else
-                text_blueCard.text = combat.blue.name + " do nothing this round.";
-        }
-
-        button_done.gameObject.SetActive(value);
-        text_resolution.gameObject.SetActive(value);
-    }
-
-    public void SetValues(bool value)
-    {
-        text_redValue.gameObject.SetActive(value);
-        text_blueValue.gameObject.SetActive(value);
-
-        if (value)
-        {
-            if (combat.red.selectedCards[combat.round] != null)
-                redPower = combat.red.GetCardValue(combat.round);
-            else
-                redPower = 0;
-            if (combat.blue.selectedCards[combat.round] != null)
-                bluePower = combat.blue.GetCardValue(combat.round);
-            else
-                bluePower = 0;
-
-            text_redValue.text = "Card Power : " + redPower;
-            text_blueValue.text = "Card Power : " + bluePower;
-        }
-    }
-
-    public void Resolution(bool value)
-    {
-        text_resolution.gameObject.SetActive(value);
-        button_done.gameObject.SetActive(value);
-
-        if (value)
-        {
-            if (redPower > bluePower)
-            {
-                text_resolution.text = combat.red.name + " won the contest!";
-                combat.red.IsWinner(true);
-            }
-            else if (bluePower > redPower)
-            {
-                text_resolution.text = combat.blue.name + " won the contest!";
-                combat.blue.IsWinner(true);
-            }
-            else
-            {
-                text_resolution.text = "It is a draw!";
-            }
-        }
-    }
-
-    void ShowResolution(bool value)
-    {
-        button_done.gameObject.SetActive(value);
-    }
-    
-    void ClickDone()
-    {
-        combat.ResolutionDone();
+        combat.ResolutionReady();
     }
 }

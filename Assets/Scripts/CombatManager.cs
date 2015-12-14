@@ -1,133 +1,127 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class CombatManager : MonoBehaviour {
 
     public enum EPhase
     {
-        Attacker,
-        Defender,
-        Resolution
-    };
+        ATTACKER,
+        DEFENDER,
+        RESOLUTION
+    }
 
-    public EPhase phase;
+    Pawn attacker;
+    Pawn defender;
+
+    CombatUI combatUI;
+    public ResolutionUI resolutionUI;
 
     public Pawn red;
     public Pawn blue;
 
-    public Pawn attacker;
-    public Pawn defender;
-
-    public CombatUI combatUI;
-    public ResolutionUI resolutionUI;
-
-    public int turn;
     public int round;
 
-    void Awake()
+    public void Awake()
     {
         combatUI = GetComponent<CombatUI>();
-        resolutionUI = GetComponent<ResolutionUI>();
+        resolutionUI.gameObject.SetActive(false);
     }
 
-	void Start ()
+    public void Start()
     {
-        attacker = red;
-        defender = blue;
-
-        StartTurn();
-	}
-
-    public void StartTurn()
-    {
-        round = 0;
-
-        phase = EPhase.Attacker;
-        attacker.SetAttacker(true);
+        SetRole();
+        combatUI.phase.text = attacker.name + " : choose your attacks.";
+        attacker.SetAttacker();
     }
 
-    public void SetRole()
+    void SetRole()
     {
-        Pawn swap;
-
-        swap = attacker;
-        attacker = defender;
-        defender = swap;
-    }
-
-    public void Done()
-    {
-        if (phase == EPhase.Attacker)
+        if (red.dominion.dominion >= blue.dominion.dominion)
         {
-            AttackerDone();
-        }
-        else if (phase == EPhase.Defender)
-        {
-            DefenderDone();
-        }
-    }
-
-    void AttackerDone()
-    {
-        attacker.SetAttacker(false);
-        defender.SetDefender(true);
-        phase = EPhase.Defender;
-    }
-
-    void DefenderDone()
-    {
-        defender.SetDefender(false);
-        phase = EPhase.Resolution;
-        resolutionUI.SetResolution(true);
-        resolutionUI.SetValues(true);
-        resolutionUI.Resolution(true);
-    }
-
-    public void ResolutionDone()
-    {
-        resolutionUI.SetResolution(false);
-        resolutionUI.SetValues(false);
-        resolutionUI.Resolution(false);
-        EndRound();
-    }
-
-    public void EndRound()
-    {
-        attacker.ManaConsumption();
-        if (IsGameOver())
-        {
-            Debug.Log("GameOver");
-            return;
-        }
-        if (IsTurnOver())
-        {
-            turn++;
-            attacker.Reset();
-            defender.Reset();
-            SetRole();
-            StartTurn();
+            attacker = red;
+            defender = blue;
         }
         else
         {
-            round++;
-            defender.SetDefender(true);
-            phase = EPhase.Defender;
+            attacker = blue;
+            defender = red;
         }
     }
 
-    public bool IsGameOver()
+    public void AttackerReady()
     {
-        if (attacker.HasMana())
-            return (false);
-        return (true);
+        combatUI.phase.text = defender.name + " : choose your defense.";
+        defender.SetDefender();
     }
 
-    public bool IsTurnOver()
+    public void DefenderReady()
     {
-        if (round >= 1)
-        {
-            return (true);
-        }
+        combatUI.phase.text = "The wheels of fate!";
+        Resolve();
+    }
+
+    public void ResolutionReady()
+    {
+        resolutionUI.gameObject.SetActive(false);
+        round++;
+        if (round < attacker.activeLine.GetComponentsInChildren<Card>().Length)
+            defender.SetDefender();
+        EndTurn();
+    }
+
+    public void Resolve()
+    {
+        attacker.power = GetPower(attacker);
+        defender.power = GetPower(defender);
+        if (attacker.power > defender.power)
+            attacker.isWinner = true;
+        else
+            defender.isWinner = false;
+        resolutionUI.gameObject.SetActive(true);
+        resolutionUI.drawResolution(red, red.activeLine.GetCard(round), blue, blue.activeLine.GetCard(round));
+    }
+
+    public void EndTurn()
+    {
+        if (!isEndGame())
+            Start();
+        else
+            CombatOver();
+    }
+
+    public bool isEndGame()
+    {
         return (false);
+    }
+
+    public void CombatOver()
+    {
+        Debug.Log("Combat over!");
+    }
+
+    public int GetPower(Pawn pawn)
+    {
+        Card card;
+        int power = 0;
+
+        card = pawn.activeLine.GetCard(round);
+
+        power = 0;
+        if (card)
+            power += card.arcane;
+
+        if (card)
+        {
+            pawn.dice = Random.Range(1, card.dice);
+            power += pawn.dice;
+        }
+
+        if (pawn.isAttacker)
+            power += pawn.attribute.ATK;
+        else
+            power += pawn.attribute.DEF;
+
+        return (power);
     }
 }

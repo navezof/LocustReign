@@ -45,17 +45,28 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\DragHandeler.cs" />
+     <Compile Include="Assets\Hand.cs" />
+     <Compile Include="Assets\Line.cs" />
+     <Compile Include="Assets\Scripts\Attribute.cs" />
      <Compile Include="Assets\Scripts\Card.cs" />
      <Compile Include="Assets\Scripts\CardUI.cs" />
      <Compile Include="Assets\Scripts\CombatManager.cs" />
      <Compile Include="Assets\Scripts\CombatUI.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
+     <Compile Include="Assets\Scripts\DebugUI.cs" />
+     <Compile Include="Assets\Scripts\Dominion.cs" />
+     <Compile Include="Assets\Scripts\Health.cs" />
      <Compile Include="Assets\Scripts\IShard.cs" />
+     <Compile Include="Assets\Scripts\Info.cs" />
+     <Compile Include="Assets\Scripts\Mana.cs" />
      <Compile Include="Assets\Scripts\Pawn.cs" />
      <Compile Include="Assets\Scripts\PawnUI.cs" />
      <Compile Include="Assets\Scripts\Persona.cs" />
+     <Compile Include="Assets\Scripts\PersonaManager.cs" />
      <Compile Include="Assets\Scripts\ResolutionUI.cs" />
      <Compile Include="Assets\Scripts\ShardDamage.cs" />
+     <Compile Include="Assets\Slot.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

@@ -2,30 +2,23 @@
 using System.Collections;
 
 public class Card : MonoBehaviour {
+    public Pawn owner;
 
-    public enum EAttribute
+    public enum EType
     {
-        AGI,
-        STR,
-        WIT
+        ACTIVE,
+        PASSIVE
     };
 
-    public EAttribute attribute;
-    public int power;
+    public EType type;
+
+    public int arcane;
+    public int dice;
+    public int dominion;
     public int cost;
+    public int health;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public IShard[] shards;
 
-    public string GetText()
-    {
-        return (name + " /p " + power + " /c " + cost);
-    }
+    public bool isDraggable;
 }

@@ -14,6 +14,5 @@ public class CombatUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        phase.text = "Turn : " + combat.turn + " - Round : " + combat.round + " - Phase : " + combat.phase.ToString();
 	}
 }

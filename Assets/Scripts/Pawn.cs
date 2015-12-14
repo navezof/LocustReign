@@ -1,133 +1,78 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Pawn : MonoBehaviour {
     CombatManager combat;
-    CardUI ui;
 
-    public Persona[] personas;
-    public int cPersona;
+    public Attribute attribute;
+    public Dominion dominion;
+    public Health health;
+    public Mana mana;
+    public PersonaManager persona;
 
-    public int AGI;
-    public int STR;
-    public int WIT;
+    public Line activeLine;
+    public Hand hand;
 
-    public Card[] selectedCards;
-    public Card.EAttribute[] selectedAttribute;
+    public Button button_OnReady;
 
     public bool isWinner;
+    public bool isAttacker;
+    public int dice;
+    public int power;
 
     void Awake()
     {
-        ui = GetComponentInChildren<CardUI>();
+        attribute = GetComponent<Attribute>();
+        dominion = GetComponent<Dominion>();
+        health = GetComponent<Health>();
+        mana = GetComponent<Mana>();
+        persona = GetComponent<PersonaManager>();
+    }
+
+    void Start()
+    {
         combat = GameObject.Find("Combat").GetComponent<CombatManager>();
+
+        persona.ActivatePersona();
+
+        activeLine.gameObject.SetActive(false);
+        button_OnReady.gameObject.SetActive(false);
     }
 
-	void Start ()
-    {        
-        selectedCards = new Card[3];
-        selectedAttribute = new Card.EAttribute[2];
-	}
-	
-	void Update ()
+    public void SetAttacker()
     {
-	}
-
-    public void SetAttacker(bool value)
-    {
-        ui.SetAttackerMode(value);
+        activeLine.ActivateAttackMode(true);
+        hand.Activate(true);
+        button_OnReady.gameObject.SetActive(true);
+        isAttacker = true;
     }
 
-    public void SetDefender(bool value)
+    public void SetDefender()
     {
-        ui.SetDefenderMode(value, combat.round);
+        activeLine.ActivateDefenseMode(true);
+        hand.Activate(true);
+        button_OnReady.gameObject.SetActive(true);
+        isAttacker = false;
     }
 
-    public void SetDone(bool value)
+    public void Die()
     {
-        combat.Done();
+        Debug.Log(name + ": Dead!");
     }
 
-    public void Reset()
+    public void onLineReadyClick()
     {
-        GetPersona().previsionMana = 0;
-        selectedCards = new Card[3];
-        selectedAttribute = new Card.EAttribute[2];
-        ui.Reset();
+        hand.Activate(false);
+        button_OnReady.gameObject.SetActive(false);
+        if (isAttacker)
+            combat.AttackerReady();
+        else
+            combat.DefenderReady();
     }
-
-    public bool CanUseCard(Card card)
-    {
-        if (card.cost > GetPersona().mana - GetPersona().previsionMana)
-            return (false);
-        return (true);
-    }
-
-    public void ManaConsumption()
-    {
-        GetPersona().mana -= GetPersona().previsionMana;
-    }
-
-    public bool HasMana()
-    {
-        if (GetPersona().mana <= 0)
-        {
-            Debug.Log(GetPersona().name + " don't have mana anymore!");
-            return (SwitchToHealthyPersona());
-        }
-        return (true);
-    }
-
-    public bool SwitchToHealthyPersona()
-    {
-        for (int i = 0; i < personas.Length; i++)
-        {
-            if (personas[i].mana > 0)
-            {
-                SwitchPersona(i);
-                return (true);
-            }
-        }
-        return (false);
-    }
-
-    public void SwitchPersona(int iPersona)
-    {
-        cPersona = iPersona;
-        personas[cPersona].Invoke();
-    }
-
-    /**
-     * GETTER AND SETTER
-     */
 
     public Persona GetPersona()
     {
-        return (personas[cPersona]);
-    }
-
-    public int GetCardValue(int round)
-    {
-        return (GetPersona().mana + GetAttribute(selectedAttribute[round]) + selectedCards[round].power);
-    }
-
-    public int GetAttribute(Card.EAttribute attribute)
-    {
-        switch (attribute)
-        {
-            case Card.EAttribute.AGI:
-                return AGI;
-            case Card.EAttribute.STR:
-                return STR;
-            case Card.EAttribute.WIT:
-                return WIT;
-            default:
-                return 0;
-        }
-    }
-
-    public void IsWinner(bool value)
-    {
-        isWinner = value;
+        return (persona.GetPersona());
     }
 }
