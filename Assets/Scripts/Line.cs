@@ -2,14 +2,40 @@
 using System.Collections;
 
 public class Line : MonoBehaviour {
+    CombatManager combat;
+
     public Pawn owner;
 
     public Card.EType type; 
 
-    public Card GetCard(int value)
+    void Awake()
+    {
+        combat = GameObject.Find("Combat").GetComponent<CombatManager>();
+    }
+
+    public void EmptyLine()
+    {
+        foreach (Card card in GetComponentsInChildren<Card>())
+        {
+            if (card != null)
+                card.Remove();
+        }
+    }
+
+    public void EmptyRound(int value)
     {
         Card[] cards = GetComponentsInChildren<Card>();
-        return cards[value];
+        if (cards[value])
+            cards[value].Remove();
+    }
+
+    public Card GetCard(int value)
+    {
+        Debug.Log(owner.name + ": Getcard:" + value);
+        Card[] cards = GetComponentsInChildren<Card>();
+        if (cards.Length > 0)
+            return (cards[value]);
+        return (null);
     }
 
     public void ActivateAttackMode(bool value)

@@ -20,6 +20,7 @@ public class CombatManager : MonoBehaviour {
     public Pawn red;
     public Pawn blue;
 
+    public int turn;
     public int round;
 
     public void Awake()
@@ -30,8 +31,9 @@ public class CombatManager : MonoBehaviour {
 
     public void Start()
     {
+        round = 0;
         SetRole();
-        combatUI.phase.text = attacker.name + " : choose your attacks.";
+        combatUI.phase.text = "Turn " + turn + " - " + attacker.name + " : choose your attacks.";
         attacker.SetAttacker();
     }
 
@@ -57,17 +59,22 @@ public class CombatManager : MonoBehaviour {
 
     public void DefenderReady()
     {
-        combatUI.phase.text = "The wheels of fate!";
+        combatUI.phase.text = "Round " + round + " - The wheels of fate!";
         Resolve();
     }
 
     public void ResolutionReady()
     {
         resolutionUI.gameObject.SetActive(false);
+        defender.activeLine.EmptyLine();
+        attacker.activeLine.EmptyRound(round);
         round++;
         if (round < attacker.activeLine.GetComponentsInChildren<Card>().Length)
+        {
             defender.SetDefender();
-        EndTurn();
+        }
+        else
+            EndTurn();
     }
 
     public void Resolve()
@@ -79,11 +86,16 @@ public class CombatManager : MonoBehaviour {
         else
             defender.isWinner = false;
         resolutionUI.gameObject.SetActive(true);
-        resolutionUI.drawResolution(red, red.activeLine.GetCard(round), blue, blue.activeLine.GetCard(round));
+        if (red.isAttacker)
+            resolutionUI.drawResolution(red, red.activeLine.GetCard(round), blue, blue.activeLine.GetCard(0));
+        else
+            resolutionUI.drawResolution(red, red.activeLine.GetCard(0), blue, blue.activeLine.GetCard(round));
     }
 
     public void EndTurn()
     {
+        attacker.activeLine.EmptyLine();
+        defender.activeLine.EmptyLine();
         if (!isEndGame())
             Start();
         else
@@ -105,22 +117,22 @@ public class CombatManager : MonoBehaviour {
         Card card;
         int power = 0;
 
-        card = pawn.activeLine.GetCard(round);
-
-        power = 0;
-        if (card)
-            power += card.arcane;
-
+        if (pawn.isAttacker)
+        {
+            card = pawn.activeLine.GetCard(round);
+            power += pawn.attribute.ATK;
+        }
+        else
+        {
+            card = pawn.activeLine.GetCard(0);
+            power += pawn.attribute.DEF;
+        }
         if (card)
         {
+            power += card.arcane;
             pawn.dice = Random.Range(1, card.dice);
             power += pawn.dice;
         }
-
-        if (pawn.isAttacker)
-            power += pawn.attribute.ATK;
-        else
-            power += pawn.attribute.DEF;
 
         return (power);
     }

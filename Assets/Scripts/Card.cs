@@ -21,4 +21,9 @@ public class Card : MonoBehaviour {
     public IShard[] shards;
 
     public bool isDraggable;
+
+    public void Remove()
+    {
+        Destroy(gameObject);
+    }
 }
