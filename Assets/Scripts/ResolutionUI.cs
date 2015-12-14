@@ -55,6 +55,6 @@ public class ResolutionUI : MonoBehaviour {
 
     public void OnResolutionDoneClick()
     {
-        combat.ResolutionReady();
+        combat.EndRound();
     }
 }

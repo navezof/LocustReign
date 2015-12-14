@@ -22,20 +22,16 @@ public class Line : MonoBehaviour {
         }
     }
 
-    public void EmptyRound(int value)
+    public void EmptyRound()
     {
         Card[] cards = GetComponentsInChildren<Card>();
-        if (cards[value])
-            cards[value].Remove();
+        cards[0].Remove();
     }
 
-    public Card GetCard(int value)
+    public Card GetNextCard()
     {
-        Debug.Log(owner.name + ": Getcard:" + value);
         Card[] cards = GetComponentsInChildren<Card>();
-        if (cards.Length > 0)
-            return (cards[value]);
-        return (null);
+        return (cards[0]);
     }
 
     public void ActivateAttackMode(bool value)

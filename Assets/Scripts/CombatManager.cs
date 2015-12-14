@@ -59,22 +59,7 @@ public class CombatManager : MonoBehaviour {
 
     public void DefenderReady()
     {
-        combatUI.phase.text = "Round " + round + " - The wheels of fate!";
         Resolve();
-    }
-
-    public void ResolutionReady()
-    {
-        resolutionUI.gameObject.SetActive(false);
-        defender.activeLine.EmptyLine();
-        attacker.activeLine.EmptyRound(round);
-        round++;
-        if (round < attacker.activeLine.GetComponentsInChildren<Card>().Length)
-        {
-            defender.SetDefender();
-        }
-        else
-            EndTurn();
     }
 
     public void Resolve()
@@ -86,10 +71,21 @@ public class CombatManager : MonoBehaviour {
         else
             defender.isWinner = false;
         resolutionUI.gameObject.SetActive(true);
-        if (red.isAttacker)
-            resolutionUI.drawResolution(red, red.activeLine.GetCard(round), blue, blue.activeLine.GetCard(0));
+        resolutionUI.drawResolution(red, red.activeLine.GetNextCard(), blue, blue.activeLine.GetNextCard());
+    }
+
+    public void EndRound()
+    {
+        resolutionUI.gameObject.SetActive(false);
+        defender.activeLine.EmptyLine();
+        attacker.activeLine.EmptyRound();
+        round++;
+        combatUI.phase.text = "Round " + round + " - The wheels of fate!";
+
+        if (attacker.activeLine.GetComponentsInChildren<Card>().Length > 0)
+            defender.SetDefender();
         else
-            resolutionUI.drawResolution(red, red.activeLine.GetCard(0), blue, blue.activeLine.GetCard(round));
+            EndTurn();
     }
 
     public void EndTurn()
@@ -117,16 +113,11 @@ public class CombatManager : MonoBehaviour {
         Card card;
         int power = 0;
 
+        card = pawn.activeLine.GetNextCard();
         if (pawn.isAttacker)
-        {
-            card = pawn.activeLine.GetCard(round);
             power += pawn.attribute.ATK;
-        }
         else
-        {
-            card = pawn.activeLine.GetCard(0);
             power += pawn.attribute.DEF;
-        }
         if (card)
         {
             power += card.arcane;

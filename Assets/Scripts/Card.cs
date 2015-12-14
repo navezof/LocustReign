@@ -24,6 +24,6 @@ public class Card : MonoBehaviour {
 
     public void Remove()
     {
-        Destroy(gameObject);
+        DestroyImmediate(gameObject);
     }
 }
