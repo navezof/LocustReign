@@ -10,7 +10,6 @@ public class DragHandeler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public Vector3 startPosition;
     public Transform startParent;
 
-
     public void Awake()
     {
         card = GetComponent<Card>();
@@ -18,22 +17,25 @@ public class DragHandeler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (card.isDraggable)
-        {
-            itemBeingDragged = gameObject;
-            startPosition = transform.position;
-            startParent = transform.parent;
-            GetComponent<CanvasGroup>().blocksRaycasts = false;
-        }
+        if (!card.isDraggable)
+            return;
+        itemBeingDragged = gameObject;
+        startPosition = transform.position;
+        startParent = transform.parent;
+        GetComponent<CanvasGroup>().blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!card.isDraggable)
+            return;
         transform.position = Input.mousePosition;
     }
     
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!card.isDraggable)
+            return;
         itemBeingDragged = null;
         GetComponent<CanvasGroup>().blocksRaycasts = true;
         if (transform.parent == startParent)

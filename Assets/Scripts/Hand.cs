@@ -2,24 +2,31 @@
 using System.Collections;
 
 public class Hand : MonoBehaviour {
-    public Pawn owner;
+    Pawn owner;
 
-    void Start()
+    public GameObject handUI;
+
+    void Awake()
     {
-        Card[] cards = GetComponentsInChildren<Card>();
-        foreach (Card card in cards)
+        owner = GetComponent<Pawn>();
+        foreach (Card card in handUI.GetComponentsInChildren<Card>())
             card.owner = owner;
     }
 
-    public void DrawCards()
+    void Start()
     {
-        Debug.Log("Draw cards");
     }
 
-    public void Activate(bool value)
+    public void Show(bool value)
     {
-        Card[] cards = GetComponentsInChildren<Card>();
-        foreach (Card card in cards)
+        handUI.SetActive(value);
+        foreach (Card card in handUI.GetComponentsInChildren<Card>())
+            card.ui.Show(value);
+    }
+
+    public void EnableInteraction(bool value)
+    {
+        foreach (Card card in handUI.GetComponentsInChildren<Card>())
             card.isDraggable = value;
     }
 }

@@ -2,9 +2,15 @@
 using System.Collections;
 
 public class PersonaManager : MonoBehaviour {
+    Pawn owner;
 
     public Persona[] personas;
     public int cPersona;
+
+    void Awake()
+    {
+        owner = GetComponent<Pawn>();
+    }
 
     public void ActivatePersona()
     {
@@ -19,6 +25,13 @@ public class PersonaManager : MonoBehaviour {
                 personas[i].gameObject.SetActive(true);
             }
         }
+    }
+
+    public void Conjure(int index)
+    {
+        cPersona = index;
+        personas[cPersona].Conjure();
+        owner.mana = personas[cPersona].GetMana();
     }
 
     public Persona GetPersona()

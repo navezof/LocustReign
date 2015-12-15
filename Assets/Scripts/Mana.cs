@@ -19,7 +19,7 @@ public class Mana : MonoBehaviour {
         text_mana.text = "Mana : " + mana.ToString();
 	}
 
-    void RecoverMana()
+    public void RecoverMana()
     {
         mana += manaPerTurn - owner.dominion.dominion;
     }

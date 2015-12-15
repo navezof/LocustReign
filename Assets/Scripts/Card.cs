@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Card : MonoBehaviour {
     public Pawn owner;
+    public CardUI ui;
 
     public enum EType
     {
@@ -21,6 +22,11 @@ public class Card : MonoBehaviour {
     public IShard[] shards;
 
     public bool isDraggable;
+
+    void Awake()
+    {
+        ui = GetComponent<CardUI>();
+    }
 
     public void Remove()
     {

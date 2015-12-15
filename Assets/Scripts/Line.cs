@@ -1,53 +1,77 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Line : MonoBehaviour {
-    CombatManager combat;
+    Pawn owner;
+    public Pawn GetOwner() { return (owner); }
 
-    public Pawn owner;
+    public GameObject lineUI;
 
-    public Card.EType type; 
+    public Card.EType type;
+
+    public Card[] cards;
 
     void Awake()
     {
-        combat = GameObject.Find("Combat").GetComponent<CombatManager>();
+        owner = GetComponent<Pawn>();
     }
 
-    public void EmptyLine()
+    void Start()
     {
-        foreach (Card card in GetComponentsInChildren<Card>())
-        {
-            if (card != null)
-                card.Remove();
-        }
+        foreach (Transform slot in lineUI.transform)
+            slot.GetComponent<Slot>().line = this;
     }
 
-    public void EmptyRound()
+    public void Show(bool value)
     {
-        Card[] cards = GetComponentsInChildren<Card>();
-        cards[0].Remove();
-    }
-
-    public Card GetNextCard()
-    {
-        Card[] cards = GetComponentsInChildren<Card>();
-        return (cards[0]);
-    }
-
-    public void ActivateAttackMode(bool value)
-    {
-        gameObject.SetActive(value);
-        foreach (Transform slot in transform)
+        lineUI.SetActive(value);
+        foreach (Transform slot in lineUI.transform)
             slot.gameObject.SetActive(value);
     }
 
-    public void ActivateDefenseMode(bool value)
+    public void ShowCards(bool value)
     {
-        gameObject.SetActive(value);
-        foreach (Transform slot in transform)
+        foreach (Card card in cards)
+            card.ui.Show(value);
+    }
+
+    public void ShowFirstCard(bool value)
+    {
+        cards[0].ui.Show(value);
+    }
+
+    public void ShowFirstSlot()
+    {
+        lineUI.SetActive(true);
+        foreach (Transform slot in lineUI.transform)
         {
+            Debug.Log(slot.name + " : slot : " + slot.GetComponent<Slot>().slotIndex);
             if (slot.GetComponent<Slot>().slotIndex != 0)
-                slot.gameObject.SetActive(value);
+                slot.gameObject.SetActive(false);
+            else
+                slot.gameObject.SetActive(true);
         }
+    }
+
+    public void ValidateLine()
+    {
+        cards = lineUI.GetComponentsInChildren<Card>();
+    }
+
+    public void EnableInteraction(bool value)
+    {
+        foreach (Card card in lineUI.GetComponentsInChildren<Card>())
+            card.isDraggable = value;
+    }
+
+    public void RemoveFirstCard()
+    {
+        cards[0].Remove();
+    }
+
+    public Card GetFirstCard()
+    {
+        return (cards[0]);
     }
 }
