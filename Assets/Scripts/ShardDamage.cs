@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShardDamage : MonoBehaviour {
+public class ShardDamage : IShard {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public int damage;
+
+    public override void Execute(Pawn target)
+    {
+        target.health.TakeDamage(damage);
+    }
 }

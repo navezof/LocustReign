@@ -40,6 +40,17 @@ public class Pawn : MonoBehaviour {
         button_OnReady.gameObject.SetActive(false);
     }
 
+    public void Win()
+    {
+        dominion.addDominion(activeLine.GetCurrentCard().dominion);
+        activeLine.GetCurrentCard().ExecuteShards(combat.defender);
+    }
+
+    public void Lose()
+    {
+        activeLine.GetCurrentCard().Break();
+    }
+
     public void SetAttacker()
     {
         activeLine.ActivateAttackMode(true);

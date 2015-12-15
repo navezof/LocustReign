@@ -26,4 +26,17 @@ public class Card : MonoBehaviour {
     {
         DestroyImmediate(gameObject);
     }
+
+    public void ExecuteShards(Pawn target)
+    {
+        foreach (IShard shard in shards)
+        {
+            shard.Execute(target);
+        }
+    }
+
+    public void Break()
+    {
+        health -= 1;
+    }
 }

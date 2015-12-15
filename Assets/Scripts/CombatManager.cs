@@ -11,10 +11,11 @@ public class CombatManager : MonoBehaviour {
         RESOLUTION
     }
 
-    Pawn attacker;
-    Pawn defender;
-
     CombatUI combatUI;
+
+    public Pawn attacker;
+    public Pawn defender;
+
     public ResolutionUI resolutionUI;
 
     public Pawn red;
@@ -67,11 +68,12 @@ public class CombatManager : MonoBehaviour {
         attacker.power = GetPower(attacker);
         defender.power = GetPower(defender);
         if (attacker.power > defender.power)
-            attacker.isWinner = true;
+            attacker.Win();
         else
-            defender.isWinner = false;
+            defender.Win();
+
         resolutionUI.gameObject.SetActive(true);
-        resolutionUI.drawResolution(red, red.activeLine.GetNextCard(), blue, blue.activeLine.GetNextCard());
+        resolutionUI.drawResolution(red, red.activeLine.GetCurrentCard(), blue, blue.activeLine.GetCurrentCard());
     }
 
     public void EndRound()
@@ -113,7 +115,7 @@ public class CombatManager : MonoBehaviour {
         Card card;
         int power = 0;
 
-        card = pawn.activeLine.GetNextCard();
+        card = pawn.activeLine.GetCurrentCard();
         if (pawn.isAttacker)
             power += pawn.attribute.ATK;
         else
