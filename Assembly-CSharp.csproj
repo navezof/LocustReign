@@ -55,29 +55,23 @@
      <Compile Include="Assets\Scripts\Dominion.cs" />
      <Compile Include="Assets\Scripts\DragHandeler.cs" />
      <Compile Include="Assets\Scripts\Hand.cs" />
+     <Compile Include="Assets\Scripts\HandUI.cs" />
      <Compile Include="Assets\Scripts\Health.cs" />
      <Compile Include="Assets\Scripts\IShard.cs" />
      <Compile Include="Assets\Scripts\Info.cs" />
      <Compile Include="Assets\Scripts\Line.cs" />
      <Compile Include="Assets\Scripts\Mana.cs" />
      <Compile Include="Assets\Scripts\Pawn.cs" />
-     <Compile Include="Assets\Scripts\PawnUI.cs" />
      <Compile Include="Assets\Scripts\Persona.cs" />
      <Compile Include="Assets\Scripts\PersonaManager.cs" />
      <Compile Include="Assets\Scripts\ResolutionUI.cs" />
      <Compile Include="Assets\Scripts\ShardDamage.cs" />
      <Compile Include="Assets\Scripts\Slot.cs" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>D:/Unity5/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>D:/Unity5/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Analytics">
- <HintPath>D:/Unity5/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
  <HintPath>D:/Unity5/Editor/Data/Managed/Mono.Cecil.dll</HintPath>

@@ -42,7 +42,3 @@ D:\NavWorkshop\Unity3D\LocustReign\Temp\bin\Debug\UnityEngine.Networking.xml
 D:\NavWorkshop\Unity3D\LocustReign\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 D:\NavWorkshop\Unity3D\LocustReign\obj\Debug\Assembly-CSharp.dll
 D:\NavWorkshop\Unity3D\LocustReign\obj\Debug\Assembly-CSharp.pdb
-D:\NavWorkshop\Unity3D\LocustReign\Temp\bin\Debug\UnityEngine.Advertisements.dll
-D:\NavWorkshop\Unity3D\LocustReign\Temp\bin\Debug\UnityEngine.Analytics.dll
-D:\NavWorkshop\Unity3D\LocustReign\Temp\bin\Debug\UnityEngine.Advertisements.xml
-D:\NavWorkshop\Unity3D\LocustReign\Temp\bin\Debug\UnityEngine.Analytics.xml

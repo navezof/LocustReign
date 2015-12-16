@@ -5,56 +5,55 @@ using System.Collections;
 public class ResolutionUI : MonoBehaviour {
 
     CombatManager combat;
+    public GameObject ui;
 
-    public Text text_redName;
-    public Text text_redArcane;
-    public Text text_redAttribute;
-    public Text text_redDice;
-    public Text text_redPower;
+    public Text text_playerName;
+    public Text text_playerArcane;
+    public Text text_playerAttribute;
+    public Text text_playerDice;
+    public Text text_playerPower;
 
-    public Text text_blueName;
-    public Text text_blueArcane;
-    public Text text_blueAttribute;
-    public Text text_blueDice;
-    public Text text_bluePower;
+    public Text text_locustName;
+    public Text text_locustArcane;
+    public Text text_locustAttribute;
+    public Text text_locustDice;
+    public Text text_locustPower;
 
     public Text text_result;
-
-    public Button button_resolutionDone;
 
     void Start()
     {
         combat = GameObject.Find("Combat").GetComponent<CombatManager>();
     }
 
-    public void drawResolution(Pawn red, Card redCard, Pawn blue, Card blueCard)
+    public void Show(bool value)
     {
-        text_redName.text = redCard.name;
-        text_redArcane.text = "Arc : " + redCard.arcane.ToString();
-        if (red.isAttacker)
-            text_redAttribute.text = "ATK : " + red.attribute.ATK.ToString();
-        else
-            text_redAttribute.text = "DEF : " + red.attribute.DEF.ToString();
-        text_redDice.text = "Dice : " + red.dice.ToString();
-        text_redPower.text = "Power : " + red.power.ToString();
-
-        text_blueName.text = blueCard.name;
-        text_blueArcane.text = "Arc : " + blueCard.arcane.ToString();
-        if (blue.isAttacker)
-            text_blueAttribute.text = "ATK : " + blue.attribute.ATK.ToString();
-        else
-            text_blueAttribute.text = "DEF : " + blue.attribute.DEF.ToString();
-        text_blueDice.text = "Dice : " + blue.dice.ToString();
-        text_bluePower.text = "Power : " + blue.power.ToString();
-
-        if (red.isWinner)
-            text_result.text = red.name + " won!";
-        else
-            text_result.text = blue.name + " won!";
+        ui.SetActive(value);
     }
 
-    public void OnResolutionDoneClick()
+    public void SetText(Pawn player, Card playerCard, Pawn locust, Card locustCard)
     {
-        combat.EndRound();
+        text_playerName.text = playerCard.name;
+        text_playerArcane.text = "Arc : " + playerCard.arcane.ToString();
+        if (player.isAttacker)
+            text_playerAttribute.text = "ATK : " + player.attribute.ATK.ToString() + " (" + player.dominion.dominion + ")";
+        else
+            text_playerAttribute.text = "DEF : " + player.attribute.DEF.ToString();
+        text_playerDice.text = "Dice : " + player.dice.ToString();
+        text_playerPower.text = "Power : " + player.power.ToString();
+
+        text_locustName.text = locustCard.name;
+        text_locustArcane.text = "Arc : " + locustCard.arcane.ToString();
+        if (locust.isAttacker)
+            text_locustAttribute.text = "ATK : " + locust.attribute.ATK.ToString() + " (" + locust.dominion.dominion + ")";
+        else
+            text_locustAttribute.text = "DEF : " + locust.attribute.DEF.ToString();
+        text_locustDice.text = "Dice : " + locust.dice.ToString();
+        text_locustPower.text = "Power : " + locust.power.ToString();
+
+        if (player.isWinner)
+            text_result.text = player.name + " won!";
+        else
+            text_result.text = locust.name + " won!";
     }
 }

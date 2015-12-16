@@ -18,7 +18,7 @@ public class Health : MonoBehaviour {
         text_health.text = "Health : " + health.ToString();	
 	}
 
-    void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         health -= damage + owner.dominion.dominion;
         Debug.Log(name + ": took " + (damage + owner.dominion.dominion) + " damage (" + damage + " + " + owner.dominion.dominion + ")");
@@ -26,7 +26,7 @@ public class Health : MonoBehaviour {
             owner.Die();
     }
 
-    void HealDamage(int heal)
+    public void HealDamage(int heal)
     {
         health += heal;
     }

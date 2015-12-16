@@ -10,8 +10,7 @@ public class Pawn : MonoBehaviour {
     public Health health;
     public Mana mana;
     public PersonaManager persona;
-
-    public Line activeLine;
+    public Line line;
     public Hand hand;
 
     public Button button_OnReady;
@@ -26,8 +25,9 @@ public class Pawn : MonoBehaviour {
         attribute = GetComponent<Attribute>();
         dominion = GetComponent<Dominion>();
         health = GetComponent<Health>();
-        mana = GetComponent<Mana>();
         persona = GetComponent<PersonaManager>();
+        line = GetComponent<Line>();
+        hand = GetComponent<Hand>();
     }
 
     void Start()
@@ -35,44 +35,17 @@ public class Pawn : MonoBehaviour {
         combat = GameObject.Find("Combat").GetComponent<CombatManager>();
 
         persona.ActivatePersona();
-
-        activeLine.gameObject.SetActive(false);
-        button_OnReady.gameObject.SetActive(false);
+    }
+    public void ManaCollection()
+    {
     }
 
-    public void SetAttacker()
+    public void CharmCast()
     {
-        activeLine.ActivateAttackMode(true);
-        hand.Activate(true);
-        button_OnReady.gameObject.SetActive(true);
-        isAttacker = true;
-    }
-
-    public void SetDefender()
-    {
-        activeLine.ActivateDefenseMode(true);
-        hand.Activate(true);
-        button_OnReady.gameObject.SetActive(true);
-        isAttacker = false;
     }
 
     public void Die()
     {
         Debug.Log(name + ": Dead!");
-    }
-
-    public void onLineReadyClick()
-    {
-        hand.Activate(false);
-        button_OnReady.gameObject.SetActive(false);
-        if (isAttacker)
-            combat.AttackerReady();
-        else
-            combat.DefenderReady();
-    }
-
-    public Persona GetPersona()
-    {
-        return (persona.GetPersona());
     }
 }

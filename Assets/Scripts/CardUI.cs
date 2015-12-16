@@ -8,6 +8,7 @@ public class CardUI : MonoBehaviour
 
     public Text text_name;
     public Text text_arcane;
+    public Text text_hidden;
 
     void Awake()
     {
@@ -18,7 +19,12 @@ public class CardUI : MonoBehaviour
     {
         text_name.text = name;
         text_arcane.text = card.arcane.ToString();
+    }
 
-
+    public void Show(bool value)
+    {
+        text_name.gameObject.SetActive(value);
+        text_arcane.gameObject.SetActive(value);
+        text_hidden.gameObject.SetActive(!value);
     }
 }

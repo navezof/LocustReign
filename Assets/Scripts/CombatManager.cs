@@ -10,15 +10,16 @@ public class CombatManager : MonoBehaviour {
         DEFENDER,
         RESOLUTION
     }
+    public EPhase phase;
+
+    public Pawn player;
+    public Pawn locust;
 
     Pawn attacker;
     Pawn defender;
 
     CombatUI combatUI;
-    public ResolutionUI resolutionUI;
-
-    public Pawn red;
-    public Pawn blue;
+    ResolutionUI resolutionUI;
 
     public int turn;
     public int round;
@@ -26,79 +27,171 @@ public class CombatManager : MonoBehaviour {
     public void Awake()
     {
         combatUI = GetComponent<CombatUI>();
-        resolutionUI.gameObject.SetActive(false);
+        resolutionUI = GetComponent<ResolutionUI>();
     }
 
     public void Start()
     {
-        round = 0;
+        player.hand.Show(false);
+        locust.hand.Show(false);
+        player.line.Show(false);
+        locust.line.Show(false);
+        resolutionUI.Show(false);
+
+        player.persona.Conjure(0);
+        locust.persona.Conjure(0);
+
+        StartTurn();
+    }
+
+    void StartTurn()
+    {
+        turn++;
+
+        player.mana.RecoverMana();
+        locust.mana.RecoverMana();
+
         SetRole();
-        combatUI.phase.text = "Turn " + turn + " - " + attacker.name + " : choose your attacks.";
-        attacker.SetAttacker();
+        defender.hand.Show(false);
+        defender.line.Show(false);
+        AttackerPhase();
     }
 
     void SetRole()
     {
-        if (red.dominion.dominion >= blue.dominion.dominion)
+        if (player.dominion.dominion >= locust.dominion.dominion)
         {
-            attacker = red;
-            defender = blue;
+            attacker = player;
+            defender = locust;
         }
         else
         {
-            attacker = blue;
-            defender = red;
+            attacker = locust;
+            defender = player;
         }
+        attacker.isAttacker = true;
+        defender.isAttacker = false;
     }
 
-    public void AttackerReady()
+    void AttackerPhase()
     {
-        combatUI.phase.text = defender.name + " : choose your defense.";
-        defender.SetDefender();
+        phase = EPhase.ATTACKER;
+
+        attacker.hand.Show(true);
+        attacker.line.Show(true);
+        attacker.hand.EnableInteraction(true);
+        attacker.line.EnableInteraction(true);
     }
 
-    public void DefenderReady()
+    public void EndAttackerPhase()
     {
-        Resolve();
+        attacker.line.ValidateLine();
+        attacker.hand.EnableInteraction(false);
+        if (attacker != player)
+        {
+            attacker.hand.Show(false);
+            attacker.line.ShowCards(false);
+            attacker.line.ShowFirstCard(true);
+        }
+        DefenderPhase();
     }
 
-    public void Resolve()
+    void DefenderPhase()
     {
-        attacker.power = GetPower(attacker);
-        defender.power = GetPower(defender);
-        if (attacker.power > defender.power)
-            attacker.isWinner = true;
+        phase = EPhase.DEFENDER;
+
+        defender.hand.Show(true);
+        defender.line.ShowFirstSlot();
+        defender.hand.EnableInteraction(true);
+        defender.line.EnableInteraction(true);
+    }
+
+    public void EndDefenderPhase()
+    {
+        defender.line.ValidateLine();
+        defender.line.EnableInteraction(false);
+        defender.hand.EnableInteraction(false);
+        if (defender != player)
+            defender.hand.Show(false);
+        ResolutionPhase();
+    }
+
+    void ResolutionPhase()
+    {
+        phase = EPhase.RESOLUTION;
+
+        if (GetPower(attacker) > GetPower(defender))
+        {
+            Win(attacker, defender);
+            Lose(defender);
+        }
         else
-            defender.isWinner = false;
-        resolutionUI.gameObject.SetActive(true);
-        resolutionUI.drawResolution(red, red.activeLine.GetNextCard(), blue, blue.activeLine.GetNextCard());
+        {
+            Win(defender, attacker);
+            Lose(attacker);
+        }
+        resolutionUI.Show(true);
+        resolutionUI.SetText(player, player.line.GetFirstCard(), locust, locust.line.GetFirstCard());
     }
 
-    public void EndRound()
+    void Win(Pawn winner, Pawn loser)
     {
-        resolutionUI.gameObject.SetActive(false);
-        defender.activeLine.EmptyLine();
-        attacker.activeLine.EmptyRound();
-        round++;
-        combatUI.phase.text = "Round " + round + " - The wheels of fate!";
-
-        if (attacker.activeLine.GetComponentsInChildren<Card>().Length > 0)
-            defender.SetDefender();
-        else
-            EndTurn();
+        winner.isWinner = true;
+        winner.dominion.addDominion(winner.line.GetFirstCard().dominion);
+        winner.line.GetFirstCard().Execute(winner, loser);
     }
 
-    public void EndTurn()
+    void Lose(Pawn pawn)
     {
-        attacker.activeLine.EmptyLine();
-        defender.activeLine.EmptyLine();
-        if (!isEndGame())
-            Start();
-        else
+        pawn.isWinner = false;
+        pawn.line.GetFirstCard().Break(1);
+    }
+
+    public void EndResolution()
+    {
+        attacker.line.RemoveFirstCard();
+        defender.line.RemoveFirstCard();
+        resolutionUI.Show(false);
+        if (IsEndGame())
+        {
             CombatOver();
+        }
+        else if (IsEndTurn())
+        {
+            StartTurn();
+        }
+        else
+        {
+            DefenderPhase();
+        }
     }
 
-    public bool isEndGame()
+    public void EndPhase()
+    {
+        switch (phase)
+        {
+            case (EPhase.ATTACKER):
+                EndAttackerPhase();
+                break;
+            case (EPhase.DEFENDER):
+                EndDefenderPhase();
+                break;
+            case (EPhase.RESOLUTION):
+                EndResolution();
+                break;
+            default:
+                return;
+        }
+    }
+
+    public bool IsEndTurn()
+    {
+        if (attacker.line.cards.Length <= 0)
+            return (true);
+        return (false);
+    }
+
+    public bool IsEndGame()
     {
         return (false);
     }
@@ -110,21 +203,19 @@ public class CombatManager : MonoBehaviour {
 
     public int GetPower(Pawn pawn)
     {
-        Card card;
         int power = 0;
 
-        card = pawn.activeLine.GetNextCard();
-        if (pawn.isAttacker)
-            power += pawn.attribute.ATK;
-        else
-            power += pawn.attribute.DEF;
-        if (card)
+        if (pawn.line.GetFirstCard() != null)
         {
-            power += card.arcane;
-            pawn.dice = Random.Range(1, card.dice);
+            power += pawn.line.GetFirstCard().arcane;
+            pawn.dice = Random.Range(1, pawn.line.GetFirstCard().dice);
             power += pawn.dice;
         }
-
+        if (pawn.isAttacker)
+            power += pawn.attribute.ATK + pawn.dominion.dominion;
+        else
+            power += pawn.attribute.DEF;
+        pawn.power = power;
         return (power);
     }
 }
