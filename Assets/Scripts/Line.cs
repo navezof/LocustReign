@@ -28,7 +28,7 @@ public class Line : MonoBehaviour {
         cards[0].Remove();
     }
 
-    public Card GetCurrentCard()
+    public Card GetNextCard()
     {
         Card[] cards = GetComponentsInChildren<Card>();
         return (cards[0]);

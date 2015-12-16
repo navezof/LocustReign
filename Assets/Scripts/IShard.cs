@@ -3,5 +3,5 @@ using System.Collections;
 
 public abstract class IShard : MonoBehaviour {
 
-    abstract public void Execute(Pawn target);
+    abstract public void Execute();
 }
