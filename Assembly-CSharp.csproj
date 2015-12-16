@@ -62,7 +62,6 @@
      <Compile Include="Assets\Scripts\Line.cs" />
      <Compile Include="Assets\Scripts\Mana.cs" />
      <Compile Include="Assets\Scripts\Pawn.cs" />
-     <Compile Include="Assets\Scripts\PawnUI.cs" />
      <Compile Include="Assets\Scripts\Persona.cs" />
      <Compile Include="Assets\Scripts\PersonaManager.cs" />
      <Compile Include="Assets\Scripts\ResolutionUI.cs" />

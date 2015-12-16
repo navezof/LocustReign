@@ -36,7 +36,7 @@ public class ResolutionUI : MonoBehaviour {
         text_playerName.text = playerCard.name;
         text_playerArcane.text = "Arc : " + playerCard.arcane.ToString();
         if (player.isAttacker)
-            text_playerAttribute.text = "ATK : " + player.attribute.ATK.ToString();
+            text_playerAttribute.text = "ATK : " + player.attribute.ATK.ToString() + " (" + player.dominion.dominion + ")";
         else
             text_playerAttribute.text = "DEF : " + player.attribute.DEF.ToString();
         text_playerDice.text = "Dice : " + player.dice.ToString();
@@ -45,7 +45,7 @@ public class ResolutionUI : MonoBehaviour {
         text_locustName.text = locustCard.name;
         text_locustArcane.text = "Arc : " + locustCard.arcane.ToString();
         if (locust.isAttacker)
-            text_locustAttribute.text = "ATK : " + locust.attribute.ATK.ToString();
+            text_locustAttribute.text = "ATK : " + locust.attribute.ATK.ToString() + " (" + locust.dominion.dominion + ")";
         else
             text_locustAttribute.text = "DEF : " + locust.attribute.DEF.ToString();
         text_locustDice.text = "Dice : " + locust.dice.ToString();

@@ -52,6 +52,8 @@ public class CombatManager : MonoBehaviour {
         locust.mana.RecoverMana();
 
         SetRole();
+        defender.hand.Show(false);
+        defender.line.Show(false);
         AttackerPhase();
     }
 
@@ -106,6 +108,7 @@ public class CombatManager : MonoBehaviour {
 
     public void EndDefenderPhase()
     {
+        defender.line.ValidateLine();
         defender.line.EnableInteraction(false);
         defender.hand.EnableInteraction(false);
         if (defender != player)
@@ -117,15 +120,38 @@ public class CombatManager : MonoBehaviour {
     {
         phase = EPhase.RESOLUTION;
 
+        if (GetPower(attacker) > GetPower(defender))
+        {
+            Win(attacker, defender);
+            Lose(defender);
+        }
+        else
+        {
+            Win(defender, attacker);
+            Lose(attacker);
+        }
         resolutionUI.Show(true);
         resolutionUI.SetText(player, player.line.GetFirstCard(), locust, locust.line.GetFirstCard());
+    }
+
+    void Win(Pawn winner, Pawn loser)
+    {
+        winner.isWinner = true;
+        winner.dominion.addDominion(winner.line.GetFirstCard().dominion);
+        winner.line.GetFirstCard().Execute(winner, loser);
+    }
+
+    void Lose(Pawn pawn)
+    {
+        pawn.isWinner = false;
+        pawn.line.GetFirstCard().Break(1);
     }
 
     public void EndResolution()
     {
         attacker.line.RemoveFirstCard();
         defender.line.RemoveFirstCard();
-        resolutionUI.enabled = false;
+        resolutionUI.Show(false);
         if (IsEndGame())
         {
             CombatOver();
@@ -177,6 +203,19 @@ public class CombatManager : MonoBehaviour {
 
     public int GetPower(Pawn pawn)
     {
-        return (0);
+        int power = 0;
+
+        if (pawn.line.GetFirstCard() != null)
+        {
+            power += pawn.line.GetFirstCard().arcane;
+            pawn.dice = Random.Range(1, pawn.line.GetFirstCard().dice);
+            power += pawn.dice;
+        }
+        if (pawn.isAttacker)
+            power += pawn.attribute.ATK + pawn.dominion.dominion;
+        else
+            power += pawn.attribute.DEF;
+        pawn.power = power;
+        return (power);
     }
 }

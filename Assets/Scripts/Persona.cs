@@ -14,7 +14,7 @@ public class Persona : MonoBehaviour {
 
     public void Conjure()
     {
-        Debug.Log(name + " is conjure!");
+        Debug.Log(name + " is conjured!");
     }
     
 }

@@ -19,6 +19,8 @@ public class Card : MonoBehaviour {
     public int cost;
     public int health;
 
+    public bool isBroken;
+
     public IShard[] shards;
 
     public bool isDraggable;
@@ -28,8 +30,24 @@ public class Card : MonoBehaviour {
         ui = GetComponent<CardUI>();
     }
 
+    public void Execute(Pawn caster, Pawn target)
+    {
+        foreach (IShard shard in shards)
+            shard.Execute(caster, target);
+    }
+
     public void Remove()
     {
         DestroyImmediate(gameObject);
+    }
+
+    public void Break(int damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            health = 0;
+            isBroken = true;
+        }
     }
 }

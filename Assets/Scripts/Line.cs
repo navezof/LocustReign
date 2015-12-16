@@ -46,7 +46,6 @@ public class Line : MonoBehaviour {
         lineUI.SetActive(true);
         foreach (Transform slot in lineUI.transform)
         {
-            Debug.Log(slot.name + " : slot : " + slot.GetComponent<Slot>().slotIndex);
             if (slot.GetComponent<Slot>().slotIndex != 0)
                 slot.gameObject.SetActive(false);
             else
@@ -68,6 +67,7 @@ public class Line : MonoBehaviour {
     public void RemoveFirstCard()
     {
         cards[0].Remove();
+        cards = lineUI.GetComponentsInChildren<Card>();
     }
 
     public Card GetFirstCard()

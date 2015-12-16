@@ -20,6 +20,6 @@ public class Info : MonoBehaviour {
 	
 	void Update ()
     {
-        text_persona.text = owner.persona.name;
+        text_persona.text = owner.persona.GetPersona().name;
 	}
 }

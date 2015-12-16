@@ -24,9 +24,13 @@ public class Slot : MonoBehaviour, IDropHandler {
 
     public void OnDrop(PointerEventData eventData)
     {
-        if (!item && DragHandeler.itemBeingDragged.GetComponent<Card>().owner == line.GetOwner() && DragHandeler.itemBeingDragged.GetComponent<Card>().type == line.type)
+        if (DragHandeler.itemBeingDragged == null)
+            return;
+        Card card = DragHandeler.itemBeingDragged.GetComponent<Card>();
+        if (!item && card.owner == line.GetOwner() && card.type == line.type)
         {
             DragHandeler.itemBeingDragged.transform.SetParent(transform);
+            line.GetOwner().mana.UseMana(card.cost);
         }
     }
 }
