@@ -2,7 +2,9 @@
 using System.Collections;
 
 public class Persona : MonoBehaviour {
-    public Card[] deck;
+    public Deck deck;
+
+    //public Card[] deck;
 
     Mana mana;
     public Mana GetMana() { return (mana); }
@@ -10,6 +12,7 @@ public class Persona : MonoBehaviour {
     void Awake()
     {
         mana = GetComponent<Mana>();
+        deck = GetComponent<Deck>();
     }
 
     public void Conjure()

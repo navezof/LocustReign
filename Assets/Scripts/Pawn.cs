@@ -36,6 +36,7 @@ public class Pawn : MonoBehaviour {
 
         persona.ActivatePersona();
     }
+
     public void ManaCollection()
     {
     }

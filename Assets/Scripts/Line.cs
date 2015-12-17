@@ -66,12 +66,16 @@ public class Line : MonoBehaviour {
 
     public void RemoveFirstCard()
     {
+        if (cards == null || cards.Length <= 0)
+            return ;
         cards[0].Remove();
         cards = lineUI.GetComponentsInChildren<Card>();
     }
 
     public Card GetFirstCard()
     {
+        if (cards == null || cards.Length <= 0)
+            return null;
         return (cards[0]);
     }
 }

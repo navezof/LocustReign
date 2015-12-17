@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Card : MonoBehaviour {
     public Pawn owner;
+    public Deck deck;
     public CardUI ui;
 
     public enum EType
@@ -38,7 +39,8 @@ public class Card : MonoBehaviour {
 
     public void Remove()
     {
-        DestroyImmediate(gameObject);
+        deck.DiscardCard(this);
+        //DestroyImmediate(gameObject);
     }
 
     public void Break(int damage)

@@ -51,6 +51,9 @@ public class CombatManager : MonoBehaviour {
         player.mana.RecoverMana();
         locust.mana.RecoverMana();
 
+        player.hand.DrawHand();
+        locust.hand.DrawHand();
+
         SetRole();
         defender.hand.Show(false);
         defender.line.Show(false);
@@ -91,7 +94,6 @@ public class CombatManager : MonoBehaviour {
         {
             attacker.hand.Show(false);
             attacker.line.ShowCards(false);
-            attacker.line.ShowFirstCard(true);
         }
         DefenderPhase();
     }
@@ -102,6 +104,8 @@ public class CombatManager : MonoBehaviour {
 
         defender.hand.Show(true);
         defender.line.ShowFirstSlot();
+        attacker.line.ShowFirstCard(true);
+
         defender.hand.EnableInteraction(true);
         defender.line.EnableInteraction(true);
     }
@@ -144,7 +148,8 @@ public class CombatManager : MonoBehaviour {
     void Lose(Pawn pawn)
     {
         pawn.isWinner = false;
-        pawn.line.GetFirstCard().Break(1);
+        if (pawn.line.GetFirstCard() != null)
+            pawn.line.GetFirstCard().Break(1);
     }
 
     public void EndResolution()
@@ -205,12 +210,13 @@ public class CombatManager : MonoBehaviour {
     {
         int power = 0;
 
-        if (pawn.line.GetFirstCard() != null)
-        {
-            power += pawn.line.GetFirstCard().arcane;
-            pawn.dice = Random.Range(1, pawn.line.GetFirstCard().dice);
-            power += pawn.dice;
-        }
+        if (pawn.line.GetFirstCard() == null)
+            return (0);
+
+        power += pawn.line.GetFirstCard().arcane;
+        pawn.dice = Random.Range(1, pawn.line.GetFirstCard().dice);
+        power += pawn.dice;
+
         if (pawn.isAttacker)
             power += pawn.attribute.ATK + pawn.dominion.dominion;
         else

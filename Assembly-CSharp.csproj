@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\CombatUI.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
      <Compile Include="Assets\Scripts\DebugUI.cs" />
+     <Compile Include="Assets\Scripts\Deck.cs" />
      <Compile Include="Assets\Scripts\Dominion.cs" />
      <Compile Include="Assets\Scripts\DragHandeler.cs" />
      <Compile Include="Assets\Scripts\Hand.cs" />

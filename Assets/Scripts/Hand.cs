@@ -6,15 +6,29 @@ public class Hand : MonoBehaviour {
 
     public GameObject handUI;
 
+    public int handSize;
+
     void Awake()
     {
         owner = GetComponent<Pawn>();
-        foreach (Card card in handUI.GetComponentsInChildren<Card>())
-            card.owner = owner;
+        //foreach (Card card in handUI.GetComponentsInChildren<Card>())
+        //    card.owner = owner;
     }
 
     void Start()
     {
+    }
+
+    public void DrawHand()
+    {
+        for (int i = 0; i < handSize; i++)
+        {
+            Card newCard = owner.persona.GetPersona().deck.DrawCard();
+            if (newCard != null)
+            {
+                newCard.transform.SetParent(handUI.transform.GetChild(i));
+            }
+        }
     }
 
     public void Show(bool value)
