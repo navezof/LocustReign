@@ -12,6 +12,7 @@ public class Pawn : MonoBehaviour {
     public PersonaManager persona;
     public Line line;
     public Hand hand;
+    public Hand personaHand;
 
     public Button button_OnReady;
 
@@ -27,7 +28,8 @@ public class Pawn : MonoBehaviour {
         health = GetComponent<Health>();
         persona = GetComponent<PersonaManager>();
         line = GetComponent<Line>();
-        hand = GetComponent<Hand>();
+        hand = GetComponents<Hand>()[0];
+        personaHand = GetComponents<Hand>()[1];
     }
 
     void Start()

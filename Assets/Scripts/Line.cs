@@ -38,6 +38,8 @@ public class Line : MonoBehaviour {
 
     public void ShowFirstCard(bool value)
     {
+        if (cards.Length <= 0)
+            return;
         cards[0].ui.Show(value);
     }
 

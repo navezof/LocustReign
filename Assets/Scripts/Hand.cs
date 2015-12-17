@@ -6,27 +6,53 @@ public class Hand : MonoBehaviour {
 
     public GameObject handUI;
 
+    public int handMaxSize;
     public int handSize;
+    public int drawSize;
+
+    public bool isPersonaHand;
 
     void Awake()
     {
         owner = GetComponent<Pawn>();
-        //foreach (Card card in handUI.GetComponentsInChildren<Card>())
-        //    card.owner = owner;
     }
 
-    void Start()
+    public void DrawHand(Deck deck)
     {
-    }
-
-    public void DrawHand()
-    {
-        for (int i = 0; i < handSize; i++)
+        handSize = handUI.GetComponentsInChildren<Card>().Length;
+        for (int i = 0; i < drawSize; i++)
         {
-            Card newCard = owner.persona.GetPersona().deck.DrawCard();
-            if (newCard != null)
+            if (handSize >= handMaxSize)
+                return;
+            if (isPersonaHand)
+                PutPersonaCardInSlot();
+            else
+                PutCardInSlot(deck);
+        }
+    }
+
+    void PutPersonaCardInSlot()
+    {
+        for (int slotIndex = 0; slotIndex < handUI.transform.childCount; slotIndex++)
+        {
+            if (handUI.transform.GetChild(slotIndex).childCount == 0)
             {
-                newCard.transform.SetParent(handUI.transform.GetChild(i));
+                GameObject newPersona = Instantiate(owner.persona.personaCardsTemplate[slotIndex].gameObject, transform.position, Quaternion.identity) as GameObject;
+                newPersona.transform.SetParent(handUI.transform.GetChild(slotIndex));
+            }
+        }
+    }
+
+    void PutCardInSlot(Deck deck)
+    {
+        Card newCard = deck.DrawCard();
+        if (newCard != null)
+        {
+            handSize++;
+            for (int slotIndex = 0; slotIndex < handUI.transform.childCount; slotIndex++)
+            {
+                if (handUI.transform.GetChild(slotIndex).childCount == 0)
+                    newCard.transform.SetParent(handUI.transform.GetChild(slotIndex));
             }
         }
     }
@@ -42,5 +68,10 @@ public class Hand : MonoBehaviour {
     {
         foreach (Card card in handUI.GetComponentsInChildren<Card>())
             card.isDraggable = value;
+    }
+
+    public int GetHandSize()
+    {
+        return (handUI.GetComponentsInChildren<Card>().Length);
     }
 }

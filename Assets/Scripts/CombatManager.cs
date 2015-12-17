@@ -18,7 +18,6 @@ public class CombatManager : MonoBehaviour {
     Pawn attacker;
     Pawn defender;
 
-    CombatUI combatUI;
     ResolutionUI resolutionUI;
 
     public int turn;
@@ -26,7 +25,6 @@ public class CombatManager : MonoBehaviour {
 
     public void Awake()
     {
-        combatUI = GetComponent<CombatUI>();
         resolutionUI = GetComponent<ResolutionUI>();
     }
 
@@ -51,8 +49,9 @@ public class CombatManager : MonoBehaviour {
         player.mana.RecoverMana();
         locust.mana.RecoverMana();
 
-        player.hand.DrawHand();
-        locust.hand.DrawHand();
+        player.hand.DrawHand(player.persona.GetPersona().deck);
+        player.personaHand.DrawHand(null);
+        locust.hand.DrawHand(locust.persona.GetPersona().deck);
 
         SetRole();
         defender.hand.Show(false);
@@ -88,6 +87,7 @@ public class CombatManager : MonoBehaviour {
 
     public void EndAttackerPhase()
     {
+        attacker.personaHand.Show(false);
         attacker.line.ValidateLine();
         attacker.hand.EnableInteraction(false);
         if (attacker != player)
@@ -124,15 +124,21 @@ public class CombatManager : MonoBehaviour {
     {
         phase = EPhase.RESOLUTION;
 
-        if (GetPower(attacker) > GetPower(defender))
+        int attackerPower = GetPower(attacker);
+        int defenderPower = GetPower(defender);
+        if (attackerPower > defenderPower)
         {
             Win(attacker, defender);
             Lose(defender);
         }
-        else
+        else if (attackerPower < defenderPower)
         {
             Win(defender, attacker);
             Lose(attacker);
+        }
+        else
+        {
+            Draw(attacker, defender);
         }
         resolutionUI.Show(true);
         resolutionUI.SetText(player, player.line.GetFirstCard(), locust, locust.line.GetFirstCard());
@@ -150,6 +156,12 @@ public class CombatManager : MonoBehaviour {
         pawn.isWinner = false;
         if (pawn.line.GetFirstCard() != null)
             pawn.line.GetFirstCard().Break(1);
+    }
+
+    void Draw(Pawn attacker, Pawn defender)
+    {
+        attacker.isWinner = false;
+        defender.isWinner = false;
     }
 
     public void EndResolution()

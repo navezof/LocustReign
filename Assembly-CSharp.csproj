@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\PersonaManager.cs" />
      <Compile Include="Assets\Scripts\ResolutionUI.cs" />
      <Compile Include="Assets\Scripts\ShardDamage.cs" />
+     <Compile Include="Assets\Scripts\ShardPersona.cs" />
      <Compile Include="Assets\Scripts\Slot.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

@@ -44,8 +44,10 @@ public class ResolutionUI : MonoBehaviour {
 
         if (player.isWinner)
             text_result.text = player.name + " won!";
-        else
+        else if (locust.isWinner)
             text_result.text = locust.name + " won!";
+        else
+            text_result.text = "Draw! Nothing happen";
     }
 
     void SetPlayer(Pawn player, Card playerCard)
