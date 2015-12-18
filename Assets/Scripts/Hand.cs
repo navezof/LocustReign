@@ -33,7 +33,7 @@ public class Hand : MonoBehaviour {
 
     void PutPersonaCardInSlot()
     {
-        for (int slotIndex = 0; slotIndex < handUI.transform.childCount; slotIndex++)
+        for (int slotIndex = 0; slotIndex < owner.persona.personaCardsTemplate.Length; slotIndex++)
         {
             if (handUI.transform.GetChild(slotIndex).childCount == 0)
             {

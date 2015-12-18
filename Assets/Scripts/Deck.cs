@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Deck : MonoBehaviour {
-    public Pawn owner;
+    private Pawn owner;
 
     public List<Card> cards;
-
-    public GameObject deck;
     public GameObject cemetary;
 
     void Start()

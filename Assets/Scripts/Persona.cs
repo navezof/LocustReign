@@ -2,10 +2,21 @@
 using System.Collections;
 
 public class Persona : MonoBehaviour {
-    public Deck deck;
+    private Deck deck;
+    public Deck GetDeck() 
+    {
+        if (deck == null)
+            deck = GetComponent<Deck>();
+        return (deck); 
+    }
 
     Mana mana;
-    public Mana GetMana() { return (mana); }
+    public Mana GetMana()
+    { 
+        if (mana == null)
+            mana = GetComponent<Mana>();
+        return (mana);
+    }
 
     void Awake()
     {

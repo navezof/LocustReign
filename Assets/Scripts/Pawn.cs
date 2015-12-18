@@ -16,8 +16,10 @@ public class Pawn : MonoBehaviour {
 
     public Button button_OnReady;
 
+    public bool hasHand;
     public bool isWinner;
     public bool isAttacker;
+
     public int dice;
     public int power;
 
@@ -50,5 +52,12 @@ public class Pawn : MonoBehaviour {
     public void Die()
     {
         Debug.Log(name + ": Dead!");
+        combat.CombatOver();
+    }
+
+    public void CloseCombatUI()
+    {
+        hand.handUI.SetActive(false);
+        line.Show(false);
     }
 }

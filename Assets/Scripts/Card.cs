@@ -33,6 +33,10 @@ public class Card : MonoBehaviour {
 
     public void Execute(Pawn caster, Pawn target)
     {
+        if (caster == null)
+            Debug.Log("A");
+        if (target == null)
+            Debug.Log("B");
         foreach (IShard shard in shards)
             shard.Execute(caster, target);
     }

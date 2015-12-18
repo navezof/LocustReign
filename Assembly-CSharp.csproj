@@ -48,6 +48,7 @@
      <Compile Include="Assets\Scripts\Attribute.cs" />
      <Compile Include="Assets\Scripts\Card.cs" />
      <Compile Include="Assets\Scripts\CardUI.cs" />
+     <Compile Include="Assets\Scripts\Cemetary.cs" />
      <Compile Include="Assets\Scripts\CombatManager.cs" />
      <Compile Include="Assets\Scripts\CombatUI.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
@@ -65,6 +66,7 @@
      <Compile Include="Assets\Scripts\Pawn.cs" />
      <Compile Include="Assets\Scripts\Persona.cs" />
      <Compile Include="Assets\Scripts\PersonaManager.cs" />
+     <Compile Include="Assets\Scripts\PhaseTimer.cs" />
      <Compile Include="Assets\Scripts\ResolutionUI.cs" />
      <Compile Include="Assets\Scripts\ShardDamage.cs" />
      <Compile Include="Assets\Scripts\ShardPersona.cs" />

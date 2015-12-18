@@ -44,6 +44,10 @@ public class PersonaManager : MonoBehaviour {
         }
 
         personas[cPersona].Conjure();
+        if (personas[cPersona] == null)
+            Debug.Log("A");
+        if (personas[cPersona].GetMana() == null)
+            Debug.Log("B");
         Debug.Log("make mana go : " + personas[cPersona].GetMana().mana);
         owner.mana.mana = personas[cPersona].GetMana().mana;
     }
@@ -61,6 +65,7 @@ public class PersonaManager : MonoBehaviour {
 
     public void OnClickPersonaChange()
     {
-        Show();
+        if (owner.hasHand)
+            Show();
     }
 }

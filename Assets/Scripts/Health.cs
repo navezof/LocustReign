@@ -30,4 +30,11 @@ public class Health : MonoBehaviour {
     {
         health += heal;
     }
+
+    public bool IsDead()
+    {
+        if (health <= 0)
+            return (true);
+        return (false);
+    }
 }

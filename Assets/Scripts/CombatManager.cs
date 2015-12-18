@@ -19,6 +19,7 @@ public class CombatManager : MonoBehaviour {
     Pawn defender;
 
     ResolutionUI resolutionUI;
+    PhaseTimer phaseTimer;
 
     public int turn;
     public int round;
@@ -26,6 +27,7 @@ public class CombatManager : MonoBehaviour {
     public void Awake()
     {
         resolutionUI = GetComponent<ResolutionUI>();
+        phaseTimer = GetComponent<PhaseTimer>();
     }
 
     public void Start()
@@ -49,9 +51,10 @@ public class CombatManager : MonoBehaviour {
         player.mana.RecoverMana();
         locust.mana.RecoverMana();
 
-        player.hand.DrawHand(player.persona.GetPersona().deck);
+        player.hand.DrawHand(player.persona.GetPersona().GetDeck());
         player.personaHand.DrawHand(null);
-        locust.hand.DrawHand(locust.persona.GetPersona().deck);
+        locust.hand.DrawHand(locust.persona.GetPersona().GetDeck());
+        locust.personaHand.DrawHand(null);
 
         SetRole();
         defender.hand.Show(false);
@@ -78,6 +81,7 @@ public class CombatManager : MonoBehaviour {
     void AttackerPhase()
     {
         phase = EPhase.ATTACKER;
+        attacker.hasHand = true;
 
         attacker.hand.Show(true);
         attacker.line.Show(true);
@@ -87,6 +91,7 @@ public class CombatManager : MonoBehaviour {
 
     public void EndAttackerPhase()
     {
+        attacker.hasHand = false;
         attacker.personaHand.Show(false);
         attacker.line.ValidateLine();
         attacker.hand.EnableInteraction(false);
@@ -101,6 +106,8 @@ public class CombatManager : MonoBehaviour {
     void DefenderPhase()
     {
         phase = EPhase.DEFENDER;
+        defender.hasHand = true;
+        phaseTimer.StartTimer();
 
         defender.hand.Show(true);
         defender.line.ShowFirstSlot();
@@ -112,6 +119,8 @@ public class CombatManager : MonoBehaviour {
 
     public void EndDefenderPhase()
     {
+        phaseTimer.StopTimer();
+        defender.hasHand = false;
         defender.line.ValidateLine();
         defender.line.EnableInteraction(false);
         defender.hand.EnableInteraction(false);
@@ -216,6 +225,14 @@ public class CombatManager : MonoBehaviour {
     public void CombatOver()
     {
         Debug.Log("Combat over!");
+        if (player.health.IsDead())
+        {
+            Debug.Log("GAME OVER");
+        }
+        else if (locust.health.IsDead())
+        {
+            Debug.Log("Player win!");
+        }
     }
 
     public int GetPower(Pawn pawn)
@@ -235,5 +252,11 @@ public class CombatManager : MonoBehaviour {
             power += pawn.attribute.DEF;
         pawn.power = power;
         return (power);
+    }
+
+    void ExitCombat()
+    {
+        player.CloseCombatUI();
+        locust.CloseCombatUI();
     }
 }
